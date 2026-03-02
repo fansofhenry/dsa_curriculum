@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS 150 — Data Structures & Algorithms</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fffdf7;
+    --ink: #1a1410;
+    --coral: #e8533a;
+    --teal: #1a7a6e;
+    --purple: #5b3fa0;
+    --gold: #c9860a;
+    --light: #f5f0e6;
+    --border: #ddd5c4;
+    --muted: #7a6e62;
+    --card: #fff9ef;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--ink);
+    color: var(--bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 3rem;
+  }
+
+  .topbar-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,253,247,0.5);
+  }
+
+  .topbar-right {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .topbar-right a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,253,247,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .topbar-right a:hover { color: var(--coral); }
+
+  /* HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    min-height: 90vh;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .hero-left {
+    padding: 5rem 3rem;
+    border-right: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+
+  h1 .italic { font-style: italic; color: var(--teal); }
+  h1 .faded { color: var(--border); }
+
+  .hero-desc {
+    max-width: 600px;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.875rem 2rem;
+    border: 2px solid var(--ink);
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-dark { background: var(--ink); color: var(--bg); }
+  .btn-dark:hover { background: var(--coral); border-color: var(--coral); }
+  .btn-outline { background: transparent; color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: var(--bg); }
+
+  .hero-right {
+    background: var(--light);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ds-index-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ds-index-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: color 0.15s;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .ds-index-item:hover { color: var(--coral); }
+
+  .ds-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--border);
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .ds-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    flex: 1;
+  }
+
+  .ds-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 5rem 3rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .sec-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    max-width: 750px;
+  }
+
+  /* PHILOSOPHY */
+  .phil-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  .phil-copy p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .principles {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .principle {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .principle-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--coral);
+    font-weight: 600;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .principle-body strong {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .principle-body p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* DSA PROJECTS - GRID */
+  .dsa-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 2px solid var(--ink);
+    margin-top: 3rem;
+  }
+
+  .dsa-card {
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .dsa-card:nth-child(even) { border-right: none; }
+  .dsa-card:nth-last-child(-n+2) { border-bottom: none; }
+
+  .dsa-header {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    background: var(--card);
+    border: none;
+    width: 100%;
+    text-align: left;
+    align-items: center;
+    transition: background 0.15s;
+  }
+
+  .dsa-header:hover { background: var(--light); }
+
+  .dsa-type-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    font-weight: 600;
+    align-self: start;
+  }
+
+  .badge-ds { background: #e8f7f5; color: var(--teal); }
+  .badge-algo { background: #f3eeff; color: var(--purple); }
+  .badge-graph { background: #fff3e8; color: var(--gold); }
+  .badge-sort { background: #fee8e5; color: var(--coral); }
+
+  .dsa-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .dsa-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .dsa-toggle {
+    font-size: 1.2rem;
+    color: var(--border);
+    transition: transform 0.2s;
+  }
+
+  .dsa-card.open .dsa-toggle { transform: rotate(45deg); }
+
+  .dsa-body {
+    display: none;
+    padding: 0 2rem 2rem;
+    background: var(--card);
+  }
+
+  .dsa-card.open .dsa-body { display: block; }
+
+  .complexity-bar {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.875rem;
+    background: var(--light);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .complexity-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+  }
+
+  .complexity-item .label {
+    color: var(--muted);
+    display: block;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.2rem;
+  }
+
+  .complexity-item .value {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .three-track-mini {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tt-box {
+    padding: 0.875rem;
+    border-top: 2px solid;
+    background: var(--bg);
+  }
+
+  .tt-box.n { border-color: var(--teal); }
+  .tt-box.i { border-color: var(--gold); }
+  .tt-box.a { border-color: var(--purple); }
+
+  .tt-level {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .tt-box.n .tt-level { color: var(--teal); }
+  .tt-box.i .tt-level { color: var(--gold); }
+  .tt-box.a .tt-level { color: var(--purple); }
+
+  .tt-project {
+    font-weight: 500;
+    font-size: 0.83rem;
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+  }
+
+  .tt-desc {
+    font-size: 0.77rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* CALENDAR */
+  .cal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.84rem;
+  }
+
+  .cal-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .cal-table td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .cal-table tr:hover td { background: var(--light); }
+
+  .wk { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--coral); font-weight: 700; }
+
+  .topic-strong { font-weight: 500; }
+  .topic-light { font-size: 0.78rem; color: var(--muted); display: block; margin-top: 0.1rem; }
+
+  .m-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
+  .mb-teal { background: var(--teal); color: white; }
+  .mb-coral { background: var(--coral); color: white; }
+  .mb-purple { background: var(--purple); color: white; }
+  .mb-gold { background: var(--gold); color: white; }
+
+  /* LIBERATORY */
+  .lib-dark {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .lib-dark h2 { color: #f5c842; }
+
+  .lib-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .lib-c {
+    border-top: 2px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+  }
+
+  .lib-c-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: #f5c842;
+    margin-bottom: 0.75rem;
+  }
+
+  .lib-c p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(255,253,247,0.55);
+  }
+
+  /* ASSESSMENT */
+  .assess-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 2px solid var(--ink);
+    margin-top: 2rem;
+  }
+
+  .assess-box {
+    background: var(--bg);
+    padding: 2rem 1.5rem;
+  }
+
+  .assess-pct {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .assess-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+  }
+
+  .assess-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  footer {
+    background: var(--ink);
+    color: rgba(255,253,247,0.4);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .phil-cols, .dsa-grid, .three-track-mini, .lib-cols { grid-template-columns: 1fr; }
+    .assess-grid { grid-template-columns: repeat(2,1fr); }
+    section { padding: 3rem 1.5rem; }
+    .topbar { padding: 1rem 1.5rem; }
+    .topbar-right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-left">CS 150 · Data Structures & Algorithms · 4 Units</span>
+  <div class="topbar-right">
+    <a href="#structures">Structures</a>
+    <a href="#calendar">Calendar</a>
+    <a href="#philosophy">Philosophy</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-left">
+    <div>
+      <div class="hero-tag">→ CS 150 · Community College · Spring 2025</div>
+      <h1>Data<br><span class="italic">Structures</span><br>&<br><span class="faded">Algorithms</span></h1>
+      <p class="hero-desc">
+        Arrays. Trees. Graphs. Sorting. These aren't abstract puzzles. They're the tools behind every app, every search engine, every social media feed — and every surveillance system. We learn them by building things with them, for our communities.
+      </p>
+      <div class="hero-actions">
+        <a href="#structures" class="btn btn-dark">Explore Projects ↓</a>
+        <a href="#calendar" class="btn btn-outline">View Calendar</a>
+      </div>
+    </div>
+    <div style="display:flex; gap:3rem; margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border);">
+      <div>
+        <div style="font-family:'DM Serif Display',serif; font-size:2rem; color:var(--coral);">16</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em;">Weeks</div>
+      </div>
+      <div>
+        <div style="font-family:'DM Serif Display',serif; font-size:2rem; color:var(--teal);">12</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em;">Mini-Projects</div>
+      </div>
+      <div>
+        <div style="font-family:'DM Serif Display',serif; font-size:2rem; color:var(--purple);">3</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em;">Learning Paths</div>
+      </div>
+      <div>
+        <div style="font-family:'DM Serif Display',serif; font-size:2rem; color:var(--gold);">∞</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em;">Real Applications</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="ds-index-title">Course Index</div>
+    <a href="#arrays" class="ds-index-item">
+      <span class="ds-num">01</span>
+      <span class="ds-name">Arrays & Dynamic Arrays</span>
+      <span class="ds-type">Linear</span>
+    </a>
+    <a href="#linkedlists" class="ds-index-item">
+      <span class="ds-num">02</span>
+      <span class="ds-name">Linked Lists</span>
+      <span class="ds-type">Linear</span>
+    </a>
+    <a href="#stacks" class="ds-index-item">
+      <span class="ds-num">03</span>
+      <span class="ds-name">Stacks & Queues</span>
+      <span class="ds-type">Linear</span>
+    </a>
+    <a href="#hashtables" class="ds-index-item">
+      <span class="ds-num">04</span>
+      <span class="ds-name">Hash Tables</span>
+      <span class="ds-type">Lookup</span>
+    </a>
+    <a href="#trees" class="ds-index-item">
+      <span class="ds-num">05</span>
+      <span class="ds-name">Binary Trees & BSTs</span>
+      <span class="ds-type">Hierarchical</span>
+    </a>
+    <a href="#heaps" class="ds-index-item">
+      <span class="ds-num">06</span>
+      <span class="ds-name">Heaps & Priority Queues</span>
+      <span class="ds-type">Hierarchical</span>
+    </a>
+    <a href="#graphs" class="ds-index-item">
+      <span class="ds-num">07</span>
+      <span class="ds-name">Graphs</span>
+      <span class="ds-type">Network</span>
+    </a>
+    <a href="#sorting" class="ds-index-item">
+      <span class="ds-num">08</span>
+      <span class="ds-name">Sorting Algorithms</span>
+      <span class="ds-type">Algorithm</span>
+    </a>
+    <a href="#search" class="ds-index-item">
+      <span class="ds-num">09</span>
+      <span class="ds-name">Search Algorithms</span>
+      <span class="ds-type">Algorithm</span>
+    </a>
+    <a href="#dp" class="ds-index-item">
+      <span class="ds-num">10</span>
+      <span class="ds-name">Dynamic Programming</span>
+      <span class="ds-type">Paradigm</span>
+    </a>
+    <a href="#advanced" class="ds-index-item">
+      <span class="ds-num">11</span>
+      <span class="ds-name">Advanced Trees</span>
+      <span class="ds-type">Balanced</span>
+    </a>
+    <a href="#complexity" class="ds-index-item">
+      <span class="ds-num">12</span>
+      <span class="ds-name">Big-O & Complexity</span>
+      <span class="ds-type">Analysis</span>
+    </a>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <div class="sec-label">01 — Philosophy</div>
+  <h2>Every data structure is a<br>design decision about the world</h2>
+  <div class="phil-cols">
+    <div class="phil-copy">
+      <p>A hash table doesn't just store data — it makes assumptions about what data is "equal." A priority queue doesn't just order items — it defines what "matters most." These are not neutral technical choices. They reflect values, and the people who program them carry those values forward.</p>
+      <p>This course treats each data structure as a mini-engineering challenge with a real-world application. You won't just implement a linked list. You'll build a music playlist system and ask: what happens when the playlist runs out? Who decides what plays next?</p>
+      <p>We draw on liberatory pedagogy throughout. The goal isn't to prepare you to pass a whiteboard interview — though you'll be ready for that too. The goal is to give you the tools to build technology that serves your community rather than exploits it.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <div class="principle-body">
+          <strong>Every structure, one project</strong>
+          <p>No isolated drills. Every data structure is introduced through a real application you build and present.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <div class="principle-body">
+          <strong>Three depths, same concept</strong>
+          <p>Novice uses the structure as a library. Intermediate builds it from scratch. Advanced analyzes its tradeoffs and extends it.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">03</div>
+        <div class="principle-body">
+          <strong>Complexity as story</strong>
+          <p>Big-O is introduced through human stories — "What happens when your city doubles in size?" — before it's introduced as math.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">04</div>
+        <div class="principle-body">
+          <strong>The ethics is inside the code</strong>
+          <p>Who does your algorithm hurt when it's slow? Who benefits from a fast lookup? Power is encoded in performance decisions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DSA PROJECTS -->
+<section id="structures">
+  <div class="sec-label">02 — Data Structures & Algorithm Projects</div>
+  <h2>Twelve mini-projects.<br>Zero boring drills.</h2>
+  <p style="color:var(--muted); max-width:580px; line-height:1.7; margin-bottom:0.5rem;">Click any card to see the three-track project, complexity requirements, and key concepts for that data structure or algorithm.</p>
+
+  <div class="dsa-grid">
+
+    <!-- 01 ARRAYS -->
+    <div class="dsa-card open" id="arrays">
+      <button class="dsa-header" onclick="toggleDSA('arrays')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Arrays & Dynamic Arrays</div>
+          <div class="dsa-subtitle">Memory layout · Amortized analysis · Python list internals</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Access</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Search</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Insert (end)</span><span class="value">O(1) amort.</span></div>
+          <div class="complexity-item"><span class="label">Insert (mid)</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Space</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Voting Tally System</div>
+            <p class="tt-desc">Build a class election voting system using Python lists. Add candidates, count votes, announce results. Reflect: how does the order of the array affect who "wins" ties?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Build ArrayList from Scratch</div>
+            <p class="tt-desc">Implement a dynamic array in Python with manual resizing (double when full). Profile append performance. Plot amortized cost. Show why 2x growth achieves O(1) amortized.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Memory Layout Explorer</div>
+            <p class="tt-desc">Use ctypes to inspect Python list memory layout. Compare row-major vs column-major storage. Benchmark cache performance. Implement a numpy-style stride array with custom indexing.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Index vs value</span>
+          <span class="tag">Contiguous memory</span>
+          <span class="tag">Amortized O(1)</span>
+          <span class="tag">Cache locality</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 LINKED LISTS -->
+    <div class="dsa-card" id="linkedlists">
+      <button class="dsa-header" onclick="toggleDSA('linkedlists')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Linked Lists</div>
+          <div class="dsa-subtitle">Nodes · Pointers · Singly & doubly linked · Memory trade-offs</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Access</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Prepend</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Insert (mid)</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Delete</span><span class="value">O(1)*</span></div>
+          <div class="complexity-item"><span class="label">Space</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Music Playlist App</div>
+            <p class="tt-desc">Build a playlist app using Python's deque (which is a doubly linked list). Add songs, skip to next/prev, loop. Reflect: when a playlist "forgets" a song, what's actually happening in memory?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Build a Doubly Linked List</div>
+            <p class="tt-desc">Implement Node class with prev/next pointers. Build full doubly linked list with insert, delete, search, reverse. Build a browser history system on top of it. Add LRU cache behavior.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Skip List Implementation</div>
+            <p class="tt-desc">Implement a skip list — a probabilistic linked list that achieves O(log n) search. Compare to binary search tree. Prove expected complexity. When would you use this over a BST?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Node pointers</span>
+          <span class="tag">O(1) prepend</span>
+          <span class="tag">No random access</span>
+          <span class="tag">LRU cache</span>
+          <span class="tag">Skip list</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 STACKS & QUEUES -->
+    <div class="dsa-card" id="stacks">
+      <button class="dsa-header" onclick="toggleDSA('stacks')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Stacks & Queues</div>
+          <div class="dsa-subtitle">LIFO · FIFO · Deque · Real-world scheduling</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Push/Enqueue</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Pop/Dequeue</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Peek</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Search</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Undo/Redo Editor</div>
+            <p class="tt-desc">Build a simple text editor with undo (stack) and a print queue simulation (queue). Run the classroom printer simulation: who gets printed first? Is FIFO fair? What if some jobs take 10x longer?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Balanced Brackets Checker</div>
+            <p class="tt-desc">Implement a stack to check balanced parentheses, brackets, and braces in real code files. Extend to check valid HTML. Then implement a call stack simulator that traces recursive function calls.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Monotonic Stack & Sliding Window</div>
+            <p class="tt-desc">Implement the "next greater element" and "largest rectangle in histogram" using a monotonic stack. Build a sliding window max using a deque. Profile space-time tradeoff against brute force.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">LIFO / FIFO</span>
+          <span class="tag">Call stack</span>
+          <span class="tag">Balanced parens</span>
+          <span class="tag">Monotonic stack</span>
+          <span class="tag">Scheduling fairness</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 HASH TABLES -->
+    <div class="dsa-card" id="hashtables">
+      <button class="dsa-header" onclick="toggleDSA('hashtables')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Hash Tables</div>
+          <div class="dsa-subtitle">Hash functions · Collision handling · O(1) lookup · Privacy implications</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Insert</span><span class="value">O(1) avg</span></div>
+          <div class="complexity-item"><span class="label">Lookup</span><span class="value">O(1) avg</span></div>
+          <div class="complexity-item"><span class="label">Delete</span><span class="value">O(1) avg</span></div>
+          <div class="complexity-item"><span class="label">Worst case</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Space</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Student Directory App</div>
+            <p class="tt-desc">Build a student directory using Python dicts. Add, remove, search students by ID. Now try: what if two students have the same ID? Run a "birthday paradox" demo with the class to feel collision probability.</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Build a Hash Table from Scratch</div>
+            <p class="tt-desc">Implement hash table with chaining and open addressing. Write your own hash function. Profile load factor vs performance. Build a word frequency counter on a 10MB text file. Beat Python dict on your custom benchmark.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Bloom Filters & Privacy</div>
+            <p class="tt-desc">Implement a Bloom filter for approximate set membership. Show space vs false positive tradeoff. Apply to a "safe browsing" use case. Then: how do browsers hash URLs to check them without sending them to Google?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Hash functions</span>
+          <span class="tag">Collision chaining</span>
+          <span class="tag">Load factor</span>
+          <span class="tag">Bloom filters</span>
+          <span class="tag">Password hashing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 TREES -->
+    <div class="dsa-card" id="trees">
+      <button class="dsa-header" onclick="toggleDSA('trees')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Binary Trees & BSTs</div>
+          <div class="dsa-subtitle">Tree traversals · BST invariant · Inorder/Preorder/Postorder · Decision trees</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">BST Search</span><span class="value">O(log n) avg</span></div>
+          <div class="complexity-item"><span class="label">BST Insert</span><span class="value">O(log n) avg</span></div>
+          <div class="complexity-item"><span class="label">Worst (skewed)</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Traversal</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Family Tree Visualizer</div>
+            <p class="tt-desc">Build a family tree with a visual tool. Navigate ancestor/descendant relationships. Run in-order traversal "by hand" on the board. Connect: how does a file system use a tree? Why is `/home/user` a "path"?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Book Search BST</div>
+            <p class="tt-desc">Implement a BST to store and search a library of books by ISBN. Write all three traversals. Build a visualization with matplotlib. Show what happens when you insert sorted data — and why trees go bad.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">BST → Decision Tree Bridge</div>
+            <p class="tt-desc">Implement BST with all operations. Then implement a simple decision tree classifier that shares the same node structure. Show: every decision tree in ML is a BST with rules instead of numbers. What does that mean for fairness?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">BST invariant</span>
+          <span class="tag">Tree traversals</span>
+          <span class="tag">DFS on trees</span>
+          <span class="tag">Height balance</span>
+          <span class="tag">ML decision trees</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 HEAPS -->
+    <div class="dsa-card" id="heaps">
+      <button class="dsa-header" onclick="toggleDSA('heaps')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Heaps & Priority Queues</div>
+          <div class="dsa-subtitle">Min/Max heap · Heapify · Emergency triage · Dijkstra</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Insert</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">Get Min/Max</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Remove Min</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">Heapify</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">ER Triage Simulator</div>
+            <p class="tt-desc">Simulate an emergency room using Python's heapq. Patients arrive with severity scores. Use a priority queue to always treat the most critical first. Ask: is "most critical first" always fair? Who decides severity?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Build a Heap from Scratch</div>
+            <p class="tt-desc">Implement a binary heap array in Python. Write sift-up and sift-down. Implement heapsort. Show that heapify is O(n) not O(n log n). Apply to a real-time event scheduler for a community calendar app.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Median Maintenance</div>
+            <p class="tt-desc">Solve the "streaming median" problem using two heaps. Prove it achieves O(log n) per update. Apply to real-time income inequality analysis on a streaming dataset. Connect to Dijkstra's algorithm.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Heap property</span>
+          <span class="tag">Sift up/down</span>
+          <span class="tag">Heapsort</span>
+          <span class="tag">Scheduling</span>
+          <span class="tag">Median streaming</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 GRAPHS -->
+    <div class="dsa-card" id="graphs">
+      <button class="dsa-header" onclick="toggleDSA('graphs')">
+        <div>
+          <span class="dsa-type-badge badge-graph">Graph</span>
+        </div>
+        <div>
+          <div class="dsa-title">Graphs & Graph Algorithms</div>
+          <div class="dsa-subtitle">BFS · DFS · Dijkstra · Social networks · Adjacency lists</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">BFS/DFS</span><span class="value">O(V+E)</span></div>
+          <div class="complexity-item"><span class="label">Dijkstra</span><span class="value">O((V+E)log V)</span></div>
+          <div class="complexity-item"><span class="label">Adj. List Space</span><span class="value">O(V+E)</span></div>
+          <div class="complexity-item"><span class="label">Adj. Matrix Space</span><span class="value">O(V²)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Six Degrees of Your Campus</div>
+            <p class="tt-desc">Draw a social graph of your class (who knows who from before). Run BFS by hand to find the "six degrees" path. Now: Facebook, Instagram, LinkedIn are all graphs. Who profits from knowing your edges?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Transit Route Optimizer</div>
+            <p class="tt-desc">Model Bay Area transit as a weighted graph using adjacency lists. Implement BFS, DFS, and Dijkstra. Find the shortest path between two points. Compare to Google Maps. Analyze who gets underserved routes.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Social Network Influence Analysis</div>
+            <p class="tt-desc">Implement PageRank from scratch on a real Twitter/academic citation graph. Detect communities with BFS. Run cycle detection. Show how PageRank amplifies existing power. Read about its use in predictive policing.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Adjacency list/matrix</span>
+          <span class="tag">BFS / DFS</span>
+          <span class="tag">Dijkstra's algorithm</span>
+          <span class="tag">Cycle detection</span>
+          <span class="tag">PageRank</span>
+          <span class="tag">Social graph ethics</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 SORTING -->
+    <div class="dsa-card" id="sorting">
+      <button class="dsa-header" onclick="toggleDSA('sorting')">
+        <div>
+          <span class="dsa-type-badge badge-sort">Algorithm</span>
+        </div>
+        <div>
+          <div class="dsa-title">Sorting Algorithms</div>
+          <div class="dsa-subtitle">Merge sort · Quick sort · Radix sort · Stability · Comparative lower bound</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Merge Sort</span><span class="value">O(n log n)</span></div>
+          <div class="complexity-item"><span class="label">Quick Sort avg</span><span class="value">O(n log n)</span></div>
+          <div class="complexity-item"><span class="label">Quick Sort worst</span><span class="value">O(n²)</span></div>
+          <div class="complexity-item"><span class="label">Radix Sort</span><span class="value">O(nk)</span></div>
+          <div class="complexity-item"><span class="label">Lower Bound</span><span class="value">Ω(n log n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Sorting Race Visualizer</div>
+            <p class="tt-desc">Use a visual sorting simulator (sort.visualized.io). Race bubble sort vs merge sort on 1000 elements. Watch them. Time them. Ask: when does the order you start with change the winner? What's the "worst case" for quicksort?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Sort the Census</div>
+            <p class="tt-desc">Implement merge sort and quicksort from scratch. Apply to a real Census dataset. Sort by income, by zip code, by race. Profile with timeit. Show that sort stability matters when sorting by multiple keys.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Beat O(n log n): Radix Sort</div>
+            <p class="tt-desc">Implement radix sort on integers and strings. Prove it beats the comparative lower bound. Profile on 10M elements. Show why radix sort isn't always "better." Write a rigorous proof of the comparative lower bound.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Divide and conquer</span>
+          <span class="tag">Stability</span>
+          <span class="tag">Pivot selection</span>
+          <span class="tag">Ω(n log n) lower bound</span>
+          <span class="tag">Radix/counting sort</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 SEARCH -->
+    <div class="dsa-card" id="search">
+      <button class="dsa-header" onclick="toggleDSA('search')">
+        <div>
+          <span class="dsa-type-badge badge-sort">Algorithm</span>
+        </div>
+        <div>
+          <div class="dsa-title">Search Algorithms</div>
+          <div class="dsa-subtitle">Binary search · Two pointers · Sliding window · Search in rotated arrays</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Linear Search</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Binary Search</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">Two Pointer</span><span class="value">O(n)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Guess My Number</div>
+            <p class="tt-desc">Play 20 questions / number guessing with optimal binary search. Visualize how each guess eliminates half the space. Apply to a real scenario: searching a dictionary. Count steps vs linear search. What does Google use?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Medical Record Lookup</div>
+            <p class="tt-desc">Build a sorted patient database. Implement binary search. Handle: first occurrence, last occurrence, rotated sorted array. Use two-pointer to find all patients in an age range. Profile vs linear scan.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Binary Search on Answer</div>
+            <p class="tt-desc">Solve "search on monotonic answer space" problems: minimize max, maximize min, k-th smallest in matrix. Prove these are binary search problems in disguise. Apply to a resource allocation problem for your community.</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Sorted prerequisite</span>
+          <span class="tag">Off-by-one hazards</span>
+          <span class="tag">Two pointers</span>
+          <span class="tag">Search on answer</span>
+          <span class="tag">Monotonicity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 DYNAMIC PROGRAMMING -->
+    <div class="dsa-card" id="dp">
+      <button class="dsa-header" onclick="toggleDSA('dp')">
+        <div>
+          <span class="dsa-type-badge badge-algo">Paradigm</span>
+        </div>
+        <div>
+          <div class="dsa-title">Dynamic Programming</div>
+          <div class="dsa-subtitle">Memoization · Tabulation · Optimal substructure · Knapsack · DNA sequencing</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Fibonacci (naive)</span><span class="value">O(2ⁿ)</span></div>
+          <div class="complexity-item"><span class="label">Fibonacci (DP)</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Knapsack</span><span class="value">O(nW)</span></div>
+          <div class="complexity-item"><span class="label">LCS</span><span class="value">O(mn)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Community Budget Planner</div>
+            <p class="tt-desc">Given a limited community center budget, choose programs to maximize community impact. Solve by hand with a table. This IS the knapsack problem. Discover DP by solving it bottom-up on a whiteboard together.</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Text Diff Tool</div>
+            <p class="tt-desc">Implement Longest Common Subsequence to build a git-diff style tool. Show "edit distance" between two versions of a document. Apply to DNA sequences. Visualize the DP table filling bottom-up.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">DP Complexity Analysis Suite</div>
+            <p class="tt-desc">Implement 5 classic DP problems (coin change, longest increasing subseq, word break, matrix chain, edit distance). For each: prove optimal substructure, derive recurrence, analyze complexity. When is DP overkill?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Optimal substructure</span>
+          <span class="tag">Overlapping subproblems</span>
+          <span class="tag">Memoization</span>
+          <span class="tag">Tabulation</span>
+          <span class="tag">LCS / edit distance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 ADVANCED TREES -->
+    <div class="dsa-card" id="advanced">
+      <button class="dsa-header" onclick="toggleDSA('advanced')">
+        <div>
+          <span class="dsa-type-badge badge-ds">Data Structure</span>
+        </div>
+        <div>
+          <div class="dsa-title">Balanced Trees & Tries</div>
+          <div class="dsa-subtitle">AVL trees · Red-black · Tries · Autocomplete · Database indexes</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">AVL search</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">AVL insert</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">Trie search</span><span class="value">O(m)</span></div>
+          <div class="complexity-item"><span class="label">Trie space</span><span class="value">O(ALPHABET·m)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">Autocomplete Your Language</div>
+            <p class="tt-desc">Build a trie-based autocomplete for a language of your choice using Python dicts. Add words from a corpus in your language. Type a prefix, get suggestions. What happens when your language has different alphabet rules?</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Self-Balancing BST</div>
+            <p class="tt-desc">Implement an AVL tree with rotations. Show that insertion always maintains O(log n) height. Compare to unbalanced BST on sorted input. Build a simple in-memory database index on top of it.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">Compressed Trie + Search Engine</div>
+            <p class="tt-desc">Implement a compressed (Patricia) trie. Build an inverted index for a small document corpus. Support prefix search, wildcard search, and ranked results. Compare memory vs standard trie. How does Elasticsearch do this at scale?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Tree rotations</span>
+          <span class="tag">AVL balance factor</span>
+          <span class="tag">Red-black trees</span>
+          <span class="tag">Tries / prefix trees</span>
+          <span class="tag">Inverted index</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 COMPLEXITY -->
+    <div class="dsa-card" id="complexity">
+      <button class="dsa-header" onclick="toggleDSA('complexity')">
+        <div>
+          <span class="dsa-type-badge badge-algo">Analysis</span>
+        </div>
+        <div>
+          <div class="dsa-title">Big-O & Complexity Analysis</div>
+          <div class="dsa-subtitle">O / Ω / Θ · Space complexity · Amortization · NP-completeness intro</div>
+        </div>
+        <div class="dsa-toggle">+</div>
+      </button>
+      <div class="dsa-body">
+        <div class="complexity-bar">
+          <div class="complexity-item"><span class="label">Constant</span><span class="value">O(1)</span></div>
+          <div class="complexity-item"><span class="label">Logarithmic</span><span class="value">O(log n)</span></div>
+          <div class="complexity-item"><span class="label">Linear</span><span class="value">O(n)</span></div>
+          <div class="complexity-item"><span class="label">Linearithmic</span><span class="value">O(n log n)</span></div>
+          <div class="complexity-item"><span class="label">Quadratic</span><span class="value">O(n²)</span></div>
+        </div>
+        <div class="three-track-mini">
+          <div class="tt-box n">
+            <div class="tt-level">🌱 Novice</div>
+            <div class="tt-project">The Speed Story</div>
+            <p class="tt-desc">Plot O(1), O(log n), O(n), O(n²), O(2ⁿ) on a spreadsheet up to n=1000. Tell the story in plain English: "If your city doubles, how much longer does this take?" Connect to real apps you use every day.</p>
+          </div>
+          <div class="tt-box i">
+            <div class="tt-level">🔨 Intermediate</div>
+            <div class="tt-project">Algorithm Audit Report</div>
+            <p class="tt-desc">Write a formal complexity analysis of every algorithm you've built this semester. For each: derive Big-O, give best/worst/average case, measure empirically and compare to theory. Produce a 2-page written report.</p>
+          </div>
+          <div class="tt-box a">
+            <div class="tt-level">🔬 Advanced</div>
+            <div class="tt-project">NP-Completeness & the Real World</div>
+            <p class="tt-desc">Prove that the Traveling Salesman Problem is NP-Hard by reduction from 3-SAT. Find 2 approximation algorithms. Apply to a real scheduling problem. Discuss: what problems in your domain might be NP-hard in disguise?</p>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Big-O notation</span>
+          <span class="tag">Best/worst/average</span>
+          <span class="tag">Amortized analysis</span>
+          <span class="tag">Space-time tradeoff</span>
+          <span class="tag">NP completeness</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar">
+  <div class="sec-label">03 — Semester Calendar</div>
+  <h2>Sixteen weeks,<br>twelve data structures, one portfolio</h2>
+  <table class="cal-table">
+    <thead>
+      <tr>
+        <th>Wk</th>
+        <th>Structure / Algo</th>
+        <th>Novice Project</th>
+        <th>Intermediate Project</th>
+        <th>Advanced Project</th>
+        <th>Deliverable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><div class="wk">01</div></td><td><span class="topic-strong">Big-O Foundations</span><span class="topic-light">Why complexity matters</span></td><td>Speed story plotting</td><td>Profiling your code</td><td>Formal complexity proofs</td><td></td></tr>
+      <tr><td><div class="wk">02</div></td><td><span class="topic-strong">Arrays & Dynamic Arrays</span><span class="topic-light">Memory, indexing, amortization</span></td><td>Voting tally system</td><td>ArrayList from scratch</td><td>Memory layout explorer</td><td><span class="m-badge mb-teal">P1 DUE</span></td></tr>
+      <tr><td><div class="wk">03</div></td><td><span class="topic-strong">Linked Lists</span><span class="topic-light">Nodes, pointers, traversal</span></td><td>Playlist app</td><td>Doubly linked list + LRU</td><td>Skip list implementation</td><td></td></tr>
+      <tr><td><div class="wk">04</div></td><td><span class="topic-strong">Stacks & Queues</span><span class="topic-light">LIFO, FIFO, scheduling</span></td><td>Undo/redo editor</td><td>Balanced brackets</td><td>Monotonic stack problems</td><td><span class="m-badge mb-teal">P2 DUE</span></td></tr>
+      <tr><td><div class="wk">05</div></td><td><span class="topic-strong">Hash Tables</span><span class="topic-light">Hash functions, collisions</span></td><td>Student directory</td><td>Hash table from scratch</td><td>Bloom filters + privacy</td><td></td></tr>
+      <tr><td><div class="wk">06</div></td><td><span class="topic-strong">Hash Tables Lab</span><span class="topic-light">Load factors, privacy implications</span></td><td>Word frequency counter</td><td>Open addressing variant</td><td>Password hashing research</td><td><span class="m-badge mb-coral">P3 DUE</span></td></tr>
+      <tr><td><div class="wk">07</div></td><td><span class="topic-strong">Binary Trees & BSTs</span><span class="topic-light">Traversals, BST property</span></td><td>Family tree visualizer</td><td>Book search BST</td><td>BST → decision tree bridge</td><td></td></tr>
+      <tr><td><div class="wk">08</div></td><td><span class="topic-strong">Heaps & Priority Queues</span><span class="topic-light">Heapify, scheduling</span></td><td>ER triage simulator</td><td>Heap from scratch</td><td>Median maintenance</td><td><span class="m-badge mb-coral">P4 DUE</span></td></tr>
+      <tr><td><div class="wk">09</div></td><td><span class="topic-strong">Sorting Algorithms</span><span class="topic-light">Merge, quick, radix, stability</span></td><td>Sorting race visualizer</td><td>Sort the census</td><td>Beat O(n log n)</td><td></td></tr>
+      <tr><td><div class="wk">10</div></td><td><span class="topic-strong">Search Algorithms</span><span class="topic-light">Binary search, two pointers</span></td><td>Guess my number</td><td>Medical record lookup</td><td>Binary search on answer</td><td><span class="m-badge mb-purple">P5 DUE</span></td></tr>
+      <tr><td><div class="wk">11</div></td><td><span class="topic-strong">Graphs I</span><span class="topic-light">Representations, BFS, DFS</span></td><td>Six degrees campus</td><td>Transit BFS/DFS</td><td>Cycle detection + topo sort</td><td></td></tr>
+      <tr><td><div class="wk">12</div></td><td><span class="topic-strong">Graphs II</span><span class="topic-light">Dijkstra, PageRank, social nets</span></td><td>Friend network map</td><td>Route optimizer Dijkstra</td><td>PageRank from scratch</td><td><span class="m-badge mb-purple">P6 DUE</span></td></tr>
+      <tr><td><div class="wk">13</div></td><td><span class="topic-strong">Dynamic Programming I</span><span class="topic-light">Memoization, tabulation</span></td><td>Community budget planner</td><td>Text diff tool</td><td>DP complexity proofs</td><td></td></tr>
+      <tr><td><div class="wk">14</div></td><td><span class="topic-strong">Balanced Trees & Tries</span><span class="topic-light">AVL, red-black, autocomplete</span></td><td>Cultural autocomplete</td><td>AVL tree implementation</td><td>Compressed trie + search engine</td><td><span class="m-badge mb-gold">P7 DUE</span></td></tr>
+      <tr><td><div class="wk">15</div></td><td><span class="topic-strong">Complexity Deep Dive</span><span class="topic-light">Amortized, NP intro</span></td><td>Algorithm comparison deck</td><td>Full semester audit</td><td>NP-hardness reduction</td><td></td></tr>
+      <tr><td><div class="wk">16</div></td><td><span class="topic-strong">🎓 Portfolio Day</span><span class="topic-light">Showcase + celebrate</span></td><td>Community demo day</td><td>GitHub portfolio review</td><td>Research lightning talks</td><td><span class="m-badge mb-gold">FINAL</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ASSESSMENT -->
+<section>
+  <div class="sec-label">04 — Assessment</div>
+  <h2>What you build, not what you memorize</h2>
+  <p style="max-width:600px; line-height:1.7; color:var(--muted); margin-bottom:0.5rem;">We use a <strong>portfolio model</strong> tied to contract grading. You choose your grade commitment at week 1. Projects are submitted in a GitHub portfolio — your permanent proof of skill that transfers anywhere you go.</p>
+  <div class="assess-grid">
+    <div class="assess-box">
+      <div class="assess-pct">50%</div>
+      <div class="assess-title">Weekly Mini-Projects</div>
+      <p class="assess-desc">12 project-based assessments, one per data structure/algorithm. Graded on correctness, reflection, and communication — not speed.</p>
+    </div>
+    <div class="assess-box">
+      <div class="assess-pct">20%</div>
+      <div class="assess-title">Complexity Analysis</div>
+      <p class="assess-desc">Written Big-O analysis for each project. Show your work. Prove, don't just state. Empirical benchmarking counts equally with theoretical proof.</p>
+    </div>
+    <div class="assess-box">
+      <div class="assess-pct">20%</div>
+      <div class="assess-title">Final Capstone</div>
+      <p class="assess-desc">An end-to-end system combining at least 3 data structures. Built for a real community need. Presented live with a code walkthrough.</p>
+    </div>
+    <div class="assess-box">
+      <div class="assess-pct">10%</div>
+      <div class="assess-title">Critical Reflections</div>
+      <p class="assess-desc">4 written reflections asking: who does this data structure serve? What assumptions does it make? What community could build something better?</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIBERATORY FOUNDATIONS -->
+<section class="lib-dark">
+  <div class="sec-label" style="color:#f5c842">05 — Pedagogical Roots</div>
+  <h2>Why we teach DSA<br>this way</h2>
+  <div class="lib-cols">
+    <div class="lib-c">
+      <div class="lib-c-title">Every Algorithm Has Values</div>
+      <p>Priority queues make choices about who matters. Hash tables make choices about what "same" means. Sorting algorithms make choices about what "order" means. We name these choices explicitly so students can change them.</p>
+    </div>
+    <div class="lib-c">
+      <div class="lib-c-title">Project-Based Learning First</div>
+      <p>Based on Seymour Papert's constructionism and Buck Institute for Education PBL principles: you learn DSA by building real things with DSA. Each project is the lesson — not an application of the lesson.</p>
+    </div>
+    <div class="lib-c">
+      <div class="lib-c-title">Community as Context</div>
+      <p>Bay Area transit networks. Student election systems. Emergency room triage. These aren't cute examples — they're systems that affect the lives of students in this room. Real context = real motivation.</p>
+    </div>
+    <div class="lib-c">
+      <div class="lib-c-title">Transfer Readiness Built In</div>
+      <p>Every project is GitHub-hosted. Every complexity analysis is written. The portfolio approach aligns with SJSU, Cal Poly, UC Berkeley expectations. Students leave with a portfolio, not just a grade.</p>
+    </div>
+    <div class="lib-c">
+      <div class="lib-c-title">Three Tracks = True Inclusion</div>
+      <p>The three-track system isn't tracking students — it's giving every student access to the same powerful ideas at their own entry point. Students choose their depth. Students can move tracks anytime.</p>
+    </div>
+    <div class="lib-c">
+      <div class="lib-c-title">Failure as Data, Not Shame</div>
+      <p>An algorithm that hits worst-case O(n²) isn't a failure — it's information. We build a classroom culture where debugging, wrong answers, and failed experiments are the most educational moments of the week.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>CS 150 · Data Structures & Algorithms · Foothill/West Valley College · 2025</p>
+  <p>Liberatory pedagogy · Project-based · Transfer-ready</p>
+</footer>
+
+<script>
+function toggleDSA(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
